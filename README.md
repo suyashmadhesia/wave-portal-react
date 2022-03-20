@@ -1,13 +1,8 @@
-## Running React on Repl.it
+## Hi to view this project live, follow the link given below !
 
-[React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
+[Wave Me!](wave-portal.suyashmadhesia.repl.co) visit this project and wave me. Don't forget to get some test ethers.
 
-[Vite](https://vitejs.dev/) is a blazing fast frontend build tool that includes features like Hot Module Reloading (HMR), optimized builds, and TypeScript support out of the box.
+[Alchemy](https://rinkebyfaucet.com/) Faucet to get some free test ether on rinkeby test network don't worry you get back your gas fee back.
 
-Using the two in conjunction is one of the fastest ways to build a web app.
-
-### Getting Started
-- Hit run
-- Edit [App.jsx](#src/App.jsx) and watch it live update!
-
-By default, Replit runs the `dev` script, but you can configure it by changing the `run` field in the `.replit` file.
+### A basic ethereum solidity project just for learning purpose.
+##### Visit [Buildspace](buildspace.so) for amazing blogs, project and jobs in solidity, web3.js
