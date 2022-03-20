@@ -56,7 +56,7 @@ const App = () =>{
   }
 
   const [allWaves, setAllWaves] = useState([]);
-  const contractAddress = "0x84a36d96eEA0c1602F68654FCbBeab19F55DC2a0";
+  const contractAddress = "0x0263B0e98e6df0AF1F77e87BC738345bE8Fb0655";
   const contractABI = abi.abi;
 
   const wave = async() => {
@@ -75,19 +75,26 @@ const App = () =>{
           setMessage("Hello ! How are you !")
         }
         // document.getElementsByClassName("input-field").innerHTML="";
-        const waveTxn = await wavePortalContract.wave(message);
+        const waveTxn = await wavePortalContract.wave(message, {gasLimit:300000});
+        setLoading(false);
+        alert("Youre message appear here shortly");
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
         console.log("Mined -- ", waveTxn.hash);
-        getAllWaves();
+        await getAllWaves();
         // count = await wavePortalContract.getTotalWaves();
         // console.log("Retrieved total wave count...", count.toNumber());
-        setLoading(false);
+        
       }
     } catch (error) {
-      setLoading(false);
-      alert("Something went wrong !! Wallet not connect. If wallet is connected make sure it is connected to Rinkeby testnet.")
+      if(currentAccount === null || currentAccount===""){
+        alert("Connect Wallet");
+      }
+      else{
+        alert("Something went wrong ! Try again sometime later.");
+      }
+       setLoading(false);
       console.log(error);
     }
   }
@@ -101,15 +108,15 @@ const App = () =>{
 
       const waves = await wavePortalContract.getAllWaves();
         
-        let wavesCleaned = [];
-        waves.forEach(wave => {
-          wavesCleaned.push({
-            address: wave.waver,
-            timestamp: new Date(wave.timestamp * 1000),
-            message: wave.message
-          })
-        });
-        setAllWaves(wavesCleaned);
+         const wavesCleaned = waves.map(wave => {
+        return {
+          address: wave.waver,
+          timestamp: wave.timestamp,
+          message: wave.message,
+        };
+      });
+
+      setAllWaves(wavesCleaned.reverse());
       
     } catch(e){
       console.log(e);
@@ -122,11 +129,27 @@ const App = () =>{
 
   const btnName = "Send Message";
 
-  useEffect(()=>{
+  
+  useEffect(() => {
+    console.log("Hum second");
     checkIfWalletIsConnected();
     getAllWaves();
-  }, []);
+    
+}, []);
 
+  function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
+  return time;
+}
+  
   return (
     <div className="mainContainer">
       <div className="dataContainer">
@@ -153,9 +176,9 @@ const App = () =>{
         {allWaves.map((wave, index) => {
           return (
             <div key={index} style={{ backgroundColor: "#f5f5f5", marginTop: "16px", padding: "8px" }}>
-              <div>From: {wave.address}</div>
-              <div>Message: {wave.message}.</div>
-               <div>Time: {wave.timestamp.toString()}</div>
+              <div><h5>From: {wave.address}</h5></div>
+              <div><h3>Message: {wave.message}</h3></div>
+               <div><h6>Time: {timeConverter(wave.timestamp)}</h6></div>
             </div>)
         })}
       </div>
